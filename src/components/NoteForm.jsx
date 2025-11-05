@@ -1,58 +1,50 @@
 import React, { useState } from "react";
 
-export default function NoteForm({ onAdd }) {
+function NoteForm({ onAddNote }) {
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title.trim() && !content.trim()) return;
-
-    onAdd({
-      title,
-      content,
-      tags: tags.split(",").map((t) => t.trim()).filter(Boolean),
-    });
-
+    if (!title.trim() || !description.trim()) return;
+    const tagsArray = tags.split(",").map((t) => t.trim()).filter(Boolean);
+    onAddNote(title, description, tagsArray);
     setTitle("");
-    setContent("");
+    setDescription("");
     setTags("");
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-white p-4 rounded-lg shadow-md mb-6"
-    >
-      <h2 className="text-lg font-semibold mb-2">Create a new note</h2>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <input
         type="text"
-        placeholder="Title"
+        placeholder="Note title..."
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        className="w-full border p-2 rounded mb-2"
+        className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
       />
       <textarea
         placeholder="Write your note..."
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        className="w-full border p-2 rounded mb-2"
-        rows={3}
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-400 h-24"
       />
       <input
         type="text"
         placeholder="Tags (comma separated)"
         value={tags}
         onChange={(e) => setTags(e.target.value)}
-        className="w-full border p-2 rounded mb-3"
+        className="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
       />
       <button
         type="submit"
-        className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition"
+        className="bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-all duration-200"
       >
         Add Note
       </button>
     </form>
   );
 }
+
+export default NoteForm;
